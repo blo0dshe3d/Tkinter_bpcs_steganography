@@ -76,8 +76,8 @@ def init_bpcs():
   alpha = val_alpha[0]
   vslfile = imgfile[0]
   msgfile = txtfile[0]
-  encfile = 'outputfile/encoded_' + current_time + '_.png'
-  msgfile_decoded = 'outputfile/msg_decoded_' + current_time + '_tmp.txt'
+  encfile = 'decoded/encoded_' + current_time + '_.png'
+  msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
 
   bpcs.capacity(vslfile, 'alpha', alpha) # check max size of message you can embed in vslfile
   bpcs.encode(vslfile, msgfile, encfile, alpha) # embed msgfile in vslfile, write to encfile

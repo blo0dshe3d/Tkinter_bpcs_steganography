@@ -1,1 +1,5 @@
 outputfile/*
+
+decoded/*.png
+decoded/*.jpg
+decoded/*.jepg
