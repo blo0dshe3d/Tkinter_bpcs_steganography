@@ -9,7 +9,7 @@
 > numpy<br/>
 > matplotlib<br/>
 
-# > act_on_image < replace import image > from PIL import image
+> :exclamation: act_on_image < replace import image > from PIL import image
 
 # INCASE OF get_n_message_grids ERROR :eyes:	
 
