@@ -1,18 +1,20 @@
-# Tkinter_bpcs_steganography
+### Tkinter_bpcs_steganography
 
-## python 2.7.15 / 14 < requirement
+# python 2.7.15 / 14 < requirement
 
-*! pip requirement
-> pillow
-> bpcs
-> numpy
-> matplotlib
+:exclamation: pip requirement<br/>
+
+> pillow<br/>
+> bpcs<br/>
+> numpy<br/>
+> matplotlib<br/>
 
 # > act_on_image < replace import image > from PIL import image
 
-## INCASE OF get_n_message_grids ERROR 
-> *! take a look at line 148 and
+# INCASE OF get_n_message_grids ERROR :eyes:	
 
-> try:
-> except Exception as error:
->     print('caught error : ' + repr(error))
+> *! take a look at line 148 and<br/>
+
+> try:<br/>
+> except Exception as error:<br/>
+>     print('caught error : ' + repr(error))<br/>
