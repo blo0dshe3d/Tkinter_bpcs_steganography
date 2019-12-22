@@ -6,6 +6,7 @@ import pygubu
 from PIL import ImageTk
 import tkMessageBox
 import bpcs
+import subprocess as cmd
 
 imgfile = list()
 txtfile = list()
@@ -31,6 +32,8 @@ class Application:
         callbacks = {
           'on_process_clicked': on_process_clicked,
           'on_clear_clicked': on_clear_clicked,
+          'on_capacity_clicked': on_capacity_clicked,
+          'on_decode_clicked': on_decode_clicked,
         }
 
         builder.connect_callbacks(callbacks)
@@ -60,6 +63,18 @@ def on_process_clicked():
   init_bpcs()
   tkMessageBox.showinfo('Message', 'Job done!')
 
+def on_capacity_clicked():
+  # cmd.call(["bpcs"])
+  bpcs.capacity(imgfile[0], 'alpha', val_alpha[0])
+  tkMessageBox.showinfo('Message', 'Image capacity!')
+
+def on_decode_clicked():
+  from datetime import datetime
+  now = datetime.now()
+  current_time = now.strftime("%dd%M%Y%H%M%S")
+  msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
+  bpcs.decode(imgfile[0], msgfile_decoded, val_alpha[0])
+
 def on_clear_clicked():
   imgfile = []
   txtfile = []
@@ -69,19 +84,16 @@ def init_bpcs():
   from datetime import datetime
   now = datetime.now()
   current_time = now.strftime("%dd%M%Y%H%M%S")
-  # print('alpha value = '+val_alpha[0])
-  # print('image file = '+imgfile[0])
-  # print('txt path = '+txtfile[0])
-  
+    
   alpha = val_alpha[0]
   vslfile = imgfile[0]
   msgfile = txtfile[0]
   encfile = 'decoded/encoded_' + current_time + '_.png'
-  msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
+  # msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
 
-  bpcs.capacity(vslfile, 'alpha', alpha) # check max size of message you can embed in vslfile
+  # bpcs.capacity(vslfile, 'alpha', alpha) # check max size of message you can embed in vslfile
   bpcs.encode(vslfile, msgfile, encfile, alpha) # embed msgfile in vslfile, write to encfile
-  bpcs.decode(encfile, msgfile_decoded, alpha) # recover message from encfile
+  # bpcs.decode(encfile, msgfile_decoded, alpha) # recover message from encfile
 
 if __name__ == '__main__':
     root = tk.Tk()

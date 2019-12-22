@@ -75,11 +75,12 @@
     <child>
       <object class="ttk.Button" id="btn_process">
         <property name="command">on_process_clicked</property>
-        <property name="text" translatable="yes">Process</property>
+        <property name="text" translatable="yes">Encode</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">3</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>
@@ -98,9 +99,9 @@
     </child>
     <child>
       <object class="ttk.Label" id="Label_1">
-        <property name="background">#c0c0c0</property>
         <property name="justify">left</property>
         <property name="text" translatable="yes">File Embed</property>
+        <property name="width">27</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
@@ -110,24 +111,16 @@
     </child>
     <child>
       <object class="ttk.Label" id="Label_2">
-        <property name="background">#c0c0c0</property>
+        <property name="anchor">w</property>
+        <property name="font">TkTextFont</property>
+        <property name="justify">left</property>
         <property name="text" translatable="yes">Image File</property>
+        <property name="width">27</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">1</property>
           <property name="sticky">s</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Button" id="btn_clear">
-        <property name="command">on_clear_clicked</property>
-        <property name="text" translatable="yes">Clear</property>
-        <layout>
-          <property name="column">0</property>
-          <property name="propagate">True</property>
-          <property name="row">5</property>
         </layout>
       </object>
     </child>
@@ -138,8 +131,34 @@
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
-          <property name="row">3</property>
+          <property name="row">1</property>
           <property name="sticky">nw</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="btn_capacity">
+        <property name="command">on_capacity_clicked</property>
+        <property name="text" translatable="yes">Capacity</property>
+        <property name="width">10</property>
+        <layout>
+          <property name="padx">180</property>
+          <property name="propagate">True</property>
+          <property name="row">3</property>
+          <property name="sticky">w</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="btn_decode">
+        <property name="command">on_decode_clicked</property>
+        <property name="text" translatable="yes">Decode</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="padx">90</property>
+          <property name="propagate">True</property>
+          <property name="row">3</property>
+          <property name="sticky">w</property>
         </layout>
       </object>
     </child>
