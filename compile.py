@@ -1,101 +1,275 @@
+import sys
+import os
+
 try:
     import tkinter as tk  # for python 3
 except:
     import Tkinter as tk  # for python 2
 import pygubu
-from PIL import ImageTk
+from PIL import ImageTk, Image
 import tkMessageBox
 import bpcs
 import subprocess as cmd
-
-imgfile = list()
-txtfile = list()
-val_alpha = list()
+from datetime import datetime
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage.measure import compare_psnr, compare_mse
+import cv2
+# from sewar.full_ref import mse, psnr
 
 class Application:
+  def __init__(self, master):
+    self.builder = builder = pygubu.Builder()
+    builder.add_from_file('main.ui')
+    self.mainwindow = builder.get_object('scr_main', master)
+    callbacks = {
+      'btn_embed': btn_embed,
+      'btn_decode': btn_decode,
+      'btn_calculate': btn_calculate,
+    }
+
+    builder.connect_callbacks(callbacks)
+    builder.connect_callbacks(self)
+
+class Embed:
+  def __init__(self, master):
+    self.builder = builder = pygubu.Builder()
+    builder.add_from_file('embed.ui')
+    self.mainwindow = builder.get_object('scr_embed', master)
+    self.imgepath = builder.get_object('path_image')
+    self.filepath = builder.get_object('path_file_txt')
     
-    def __init__(self, master):
+    callbacks = {
+      'btn_embed': btn_embed,
+      'btn_decode': btn_decode,
+      'btn_calculate': btn_calculate,
+    }
 
-        #1: Create a builder
-        self.builder = builder = pygubu.Builder()
+    builder.connect_callbacks(callbacks)
+    builder.connect_callbacks(self)
 
-        #2: Load an ui file
-        builder.add_from_file('main.ui')
+    size = 300, 300
 
-        #3: Create the widget using a master as parent
-        self.mainwindow = builder.get_object('mainwindow', master)
-        self.imgepath = builder.get_object('img_path')
-        self.filepath = builder.get_object('file_path')
-        self.txt_alpha = builder.get_object('txt_alpha')
-        
-        # Configure callbacks
-        callbacks = {
-          'on_process_clicked': on_process_clicked,
-          'on_clear_clicked': on_clear_clicked,
-          'on_capacity_clicked': on_capacity_clicked,
-          'on_decode_clicked': on_decode_clicked,
-        }
+    img = Image.open('noImage.gif')
+    img.thumbnail(size, Image.ANTIALIAS)
 
-        builder.connect_callbacks(callbacks)
-        builder.connect_callbacks(self)
-        
-        # Configure image lable
-        self.img_label = builder.get_object('lbl_image', master)
-        self.img_label.new_image = ImageTk.PhotoImage(file='noImage.gif')
-        self.img_label.config(image=self.img_label.new_image)
-        
-    def on_image_change(self, event=None):
-        path = self.imgepath.cget('path')
-        # print(self.txt_alpha.get())
-        imgfile.append(path)
-        val_alpha.append(float(self.txt_alpha.get()))
-        self.img_label.new_image = ImageTk.PhotoImage(file=path)
-        self.img_label.config(image=self.img_label.new_image)
-        tkMessageBox.showinfo('You choosed:', path)
-    
-    def on_file_change(self, event=None):
-        path = self.filepath.cget('path')
-        txtfile.append(path)
-        tkMessageBox.showinfo('You choosed:', path)
+    self.img_label = builder.get_object('lbl_image', master)
+    self.img_label.new_image = ImageTk.PhotoImage(img)
+    self.img_label.config(image=self.img_label.new_image)
+
+  def on_image(self, event=None):
+    path = self.imgepath.cget('path')
+    size = 300, 300
+
+    img = Image.open(path)
+    img.thumbnail(size, Image.ANTIALIAS)
+
+    self.img_label.new_image = ImageTk.PhotoImage(img)
+    self.img_label.config(image=self.img_label.new_image)
+    tkMessageBox.showinfo('You choosed:', path)
+
+  def on_file(self, event=None):
+    path = self.filepath.cget('path')
+    tkMessageBox.showinfo('You choosed:', path)
+
+  def btn_process(self, event=None):
+    now = datetime.now()
+    current_time = now.strftime("%dd%M%Y%H%M%S")
+    entry = self.builder.get_object('txt_alpha')
+    vessel = self.imgepath.cget('path')
+    file = self.filepath.cget('path')
+    encfile = 'encoded/encoded_' + current_time + '.png'
+    alpha = entry.get()
+
+    if not vessel:
+      tkMessageBox.showinfo('Warn: ', 'Fill Image input')
+    elif not file:
+      tkMessageBox.showinfo('Warn: ', 'Fill message input')
+    elif not alpha:
+      tkMessageBox.showinfo('Warn: ', 'Fill alpha input')
+    else:
+      bpcs.encode(vessel, file, encfile, float(alpha)) # embed msgfile in vslfile, write to encfile
+  
+  def btn_calculate(self, event=None):
+    vessel = self.imgepath.cget('path')
+    txt_alpha = self.builder.get_object('txt_alpha')
+    alpha = txt_alpha.get()
+
+    if not vessel:
+      tkMessageBox.showinfo('Warn: ', 'Fill Image input')
+    elif not alpha:
+      tkMessageBox.showinfo('Warn: ', 'Fill alpha input')
+    else:
+      bpcs.capacity(vessel, 'tmp', float(alpha))
+      tkMessageBox.showinfo('Info ', 'Job done')
+
+  def on_btn_embed(self, event=None):
+    hide_frame()
+    btn_embed()
+    print('embed btn')
+
+  def on_btn_decode(self, event=None):
+    btn_decode()
+    print('embed decode')
+
+  def on_btn_msepsnr(self, event=None):
+    btn_calculate()
+    print('embed mse psnr')
+
+class Decode:
+  def __init__(self, master):
+    self.builder = builder = pygubu.Builder()
+    builder.add_from_file('decode.ui')
+    self.mainwindow = builder.get_object('scr_decode', master)
+    self.imgepath = builder.get_object('path_image')
+    callbacks = {
+      'btn_embed': btn_embed,
+      'btn_decode': btn_decode,
+      'btn_calculate': btn_calculate,
+    }
+
+    size = 300, 300
+
+    img = Image.open('noImage.gif')
+    img.thumbnail(size, Image.ANTIALIAS)
+
+    builder.connect_callbacks(callbacks)
+    builder.connect_callbacks(self)
+    self.img_label = builder.get_object('lbl_image', master)
+    self.img_label.new_image = ImageTk.PhotoImage(img)
+    self.img_label.config(image=self.img_label.new_image)
+
+  def path_image(self, event=None):
+    path = self.imgepath.cget('path')
+    size = 300, 300
+    img = Image.open(path)
+    img.thumbnail(size, Image.ANTIALIAS)
+
+    self.img_label.new_image = ImageTk.PhotoImage(img)
+    self.img_label.config(image=self.img_label.new_image)
+    tkMessageBox.showinfo('You choosed:', path)
+
+  def btn_process(self, event=None):
+    vessel = self.imgepath.cget('path')
+    txt_alpha = self.builder.get_object('txt_alpha')
+    alpha = txt_alpha.get()
+    now = datetime.now()
+    current_time = now.strftime("%dd%M%Y%H%M%S")
+    msgfile_decoded = 'decoded/decoded_' + current_time + '_tmp.txt'
+
+    if not vessel:
+      tkMessageBox.showinfo('Warn: ', 'Fill Image input')
+    elif not alpha:
+      tkMessageBox.showinfo('Warn: ', 'Fill alpha input')
+    else:
+      bpcs.decode(vessel, msgfile_decoded, float(alpha))
+      tkMessageBox.showinfo('Info ', 'Job done')
+
+class Calculate:
+  def __init__(self, master):
+    self.builder = builder = pygubu.Builder()
+    builder.add_from_file('calculate.ui')
+    self.mainwindow = builder.get_object('scr_calculate', master)
+    self.img_cover = builder.get_object('path_cover')
+    self.img_stego = builder.get_object('path_stego')
+
+    callbacks = {
+      'btn_embed': btn_embed,
+      'btn_decode': btn_decode,
+      'btn_calculate': btn_calculate,
+    }
+
+    builder.connect_callbacks(callbacks)
+    builder.connect_callbacks(self)
+    self.img_label_1 = builder.get_object('lbl_image_1', master)
+    self.img_label_2 = builder.get_object('lbl_image_2', master)
+    self.img_label_1.new_image = ImageTk.PhotoImage(file='noImage.gif')
+    self.img_label_1.config(image=self.img_label_1.new_image)
+    self.img_label_2.new_image = ImageTk.PhotoImage(file='noImage.gif')
+    self.img_label_2.config(image=self.img_label_2.new_image)
+  
+  def btn_process(self, event=None):
+    origin = self.img_cover.cget('path')
+    encode = self.img_stego.cget('path')
+    # im_origin = Image.open(origin, 'r')
+    # im_encode = Image.open(encode, 'r')
+    # raw_origin = list(im_origin.getdata())
+    # raw_encode = list(im_origin.getdata())
+    # matrix_origin = [x for sets in raw_origin for x in sets]
+    # matrix_encode = [x for sets in raw_encode for x in sets]
+    # cnt_origin = get_rgbycbcr(im_origin)
+    # cnt_encode = get_rgbycbcr(im_encode)
+    ref_img = cv2.imread(origin)
+    noisy_img = cv2.imread(encode)
+    PSNR = compare_psnr(ref_img, noisy_img)
+    MSE = compare_mse(ref_img, noisy_img)
+    print('PSNR : '+ repr(PSNR))
+    print('MSE : '+ repr(MSE))
+    # print(cnt_encode)
+
+  def path_cover(self, event=None):
+    size = 300, 300
+    path = self.img_cover.cget('path')
+    img = Image.open(path)
+    img.thumbnail(size, Image.ANTIALIAS)
+    self.img_label_1.new_image = ImageTk.PhotoImage(img)
+    self.img_label_1.config(image=self.img_label_1.new_image)
+
+  def path_stego(self, event=None):
+    size = 300, 300
+    path = self.img_stego.cget('path')
+    img = Image.open(path)
+    img.thumbnail(size, Image.ANTIALIAS)
+    self.img_label_2.new_image = ImageTk.PhotoImage(img)
+    self.img_label_2.config(image=self.img_label_2.new_image)
+
+### custom build
+# def rgb_calc(ref_file):
+#   img = Image.open(ref_file)
+#   width, height = img.size
+#   print(width)
+#   print(height)
+#   rgb_dict = {}
+#   rgb = img.load()
+#   for x in range(width):
+#     for y in range(height):
+#       r, g, b = rgb[x, y]
+#       lum = 0.299 * r + 0.587 * g + 0.114 * b
+#       cb = 128 - 0.168736 * r - 0.331264 * g + 0.5 * b
+#       cr = 128 + 0.5 * r - 0.418688 * g - 0.081312 * b
+#       rgb_dict[(x, y)] = (r, g, b, lum, cb, cr)
+#   return rgb_dict
+
+def get_rgbycbcr(img):
+  R, G, B = np.array(img).transpose(2, 0, 1)[:3]  # ignore alpha if present
+  Y = 0.299 * R + 0.587 * G + 0.114 * B
+  Cb = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B
+  Cr = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B
+  return np.array([R, G, B, Y, Cb, Cr], dtype=float).transpose(2, 1, 0)
 
 # define btn_process action
-def on_process_clicked():
-  init_bpcs()
-  tkMessageBox.showinfo('Message', 'Job done!')
+def btn_embed():
+  root = tk.Toplevel()
+  app = Embed(root)
+  root.mainloop()
 
-def on_capacity_clicked():
-  # cmd.call(["bpcs"])
-  bpcs.capacity(imgfile[0], 'alpha', val_alpha[0])
-  tkMessageBox.showinfo('Message', 'Image capacity!')
+def btn_decode():
+  root = tk.Toplevel()
+  app = Decode(root)
+  root.mainloop()
 
-def on_decode_clicked():
-  from datetime import datetime
-  now = datetime.now()
-  current_time = now.strftime("%dd%M%Y%H%M%S")
-  msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
-  bpcs.decode(imgfile[0], msgfile_decoded, val_alpha[0])
+def btn_calculate():
+  root = tk.Toplevel()
+  app = Calculate(root)
+  root.mainloop()
 
-def on_clear_clicked():
-  imgfile = []
-  txtfile = []
-  val_alpha = []
-
-def init_bpcs():
-  from datetime import datetime
-  now = datetime.now()
-  current_time = now.strftime("%dd%M%Y%H%M%S")
-    
-  alpha = val_alpha[0]
-  vslfile = imgfile[0]
-  msgfile = txtfile[0]
-  encfile = 'decoded/encoded_' + current_time + '_.png'
-  # msgfile_decoded = 'decoded/msg_decoded_' + current_time + '_tmp.txt'
-
-  # bpcs.capacity(vslfile, 'alpha', alpha) # check max size of message you can embed in vslfile
-  bpcs.encode(vslfile, msgfile, encfile, alpha) # embed msgfile in vslfile, write to encfile
-  # bpcs.decode(encfile, msgfile_decoded, alpha) # recover message from encfile
+def hide_frame():
+  root = tk.Toplevel()
+  app = Embed(root)
+  app.hide()
 
 if __name__ == '__main__':
-    root = tk.Tk()
-    app = Application(root)
-    root.mainloop()
+  root = tk.Tk()
+  app = Application(root)
+  root.mainloop()

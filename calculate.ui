@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="tk.Toplevel" id="scr_calculate">
+    <property name="borderwidth">0</property>
+    <property name="cursor">arrow</property>
+    <property name="height">300</property>
+    <property name="maxsize">900|600</property>
+    <property name="minsize">900|600</property>
+    <property name="overrideredirect">False</property>
+    <property name="padx">10</property>
+    <property name="pady">10</property>
+    <property name="resizable">none</property>
+    <property name="title" translatable="yes">BPCS</property>
+    <property name="width">1500</property>
+    <child>
+      <object class="ttk.Labelframe" id="frm_menu">
+        <property name="padding">0</property>
+        <property name="text" translatable="yes">MENU</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="padx">10</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">nw</property>
+        </layout>
+        <child>
+          <object class="ttk.Button" id="btn_embed">
+            <property name="command">on_embed</property>
+            <property name="text" translatable="yes">EMBEDING</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">20</property>
+              <property name="ipady">30</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_decode">
+            <property name="command">on_decode</property>
+            <property name="text" translatable="yes">DECODING</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">20</property>
+              <property name="ipady">30</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_psnrmse">
+            <property name="command">on_msepsnr</property>
+            <property name="text" translatable="yes">MSE &amp; PSNR</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">20</property>
+              <property name="ipady">30</property>
+              <property name="padx">5</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="frm_action">
+        <property name="height">400</property>
+        <property name="text" translatable="yes">MSE &amp; PSNR</property>
+        <property name="width">500</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="columnspan">50</property>
+          <property name="ipady">0</property>
+          <property name="padx">150</property>
+          <property name="pady">0</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="rowspan">50</property>
+          <property name="sticky">ne</property>
+          <rows>
+            <row id="0">
+              <property name="minsize">0</property>
+              <property name="pad">0</property>
+              <property name="weight">0</property>
+            </row>
+          </rows>
+          <columns>
+            <column id="0">
+              <property name="minsize">0</property>
+              <property name="pad">0</property>
+            </column>
+            <column id="14">
+              <property name="minsize">0</property>
+              <property name="pad">0</property>
+              <property name="weight">0</property>
+            </column>
+            <column id="15">
+              <property name="minsize">0</property>
+              <property name="pad">0</property>
+            </column>
+          </columns>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="lbl_image_1">
+            <property name="image">noImage.gif</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">20</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="lbl_image_2">
+            <property name="image">noImage.gif</property>
+            <property name="text" translatable="yes">Label_1</property>
+            <layout>
+              <property name="column">16</property>
+              <property name="padx">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="pygubu.builder.widgets.pathchooserinput" id="path_cover">
+            <property name="type">file</property>
+            <bind add="" handler="path_cover" sequence="&lt;&lt;PathChooserPathChanged&gt;&gt;" />
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">100</property>
+              <property name="padx">20</property>
+              <property name="pady">20</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="pygubu.builder.widgets.pathchooserinput" id="path_stego">
+            <property name="type">file</property>
+            <bind add="" handler="path_stego" sequence="&lt;&lt;PathChooserPathChanged&gt;&gt;" />
+            <layout>
+              <property name="column">0</property>
+              <property name="ipadx">100</property>
+              <property name="padx">20</property>
+              <property name="pady">20</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_1">
+            <property name="text" translatable="yes">Input Cover Image</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">20</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_2">
+            <property name="text" translatable="yes">Input Stego Image</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">20</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="btn_process">
+            <property name="command">btn_process</property>
+            <property name="text" translatable="yes">Process</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="txt_mse">
+            <property name="state">readonly</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">50</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="txt_psnr">
+            <property name="exportselection">false</property>
+            <property name="state">readonly</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_3">
+            <property name="text" translatable="yes">MSE</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_4">
+            <property name="text" translatable="yes">PSNR</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">145</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
+              <property name="sticky">e</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

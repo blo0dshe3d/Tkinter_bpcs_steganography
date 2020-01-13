@@ -1,0 +1,5 @@
+utils line 5 > pip install enum34 = 
+log2 problem > numpy
+
+pip install scikit-image
+pip install opencv-python
