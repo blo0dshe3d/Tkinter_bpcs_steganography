@@ -52,7 +52,7 @@
         </child>
         <child>
           <object class="ttk.Button" id="btn_pnsrmse">
-            <property name="command">on_msepnsr</property>
+            <property name="command">on_msepsnr</property>
             <property name="text" translatable="yes">MSE &amp; PNSR</property>
             <layout>
               <property name="column">0</property>

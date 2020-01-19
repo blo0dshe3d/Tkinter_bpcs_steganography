@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import compare_psnr, compare_mse
 import cv2
+import __builtin__
 # from sewar.full_ref import mse, psnr
 
 class Application:
@@ -94,6 +95,7 @@ class Embed:
   def btn_calculate(self, event=None):
     vessel = self.imgepath.cget('path')
     txt_alpha = self.builder.get_object('txt_alpha')
+    txt_byte = self.builder.get_variable('byte_val')
     alpha = txt_alpha.get()
 
     if not vessel:
@@ -101,13 +103,14 @@ class Embed:
     elif not alpha:
       tkMessageBox.showinfo('Warn: ', 'Fill alpha input')
     else:
-      bpcs.capacity(vessel, 'tmp', float(alpha))
+      cpt = bpcs.capacity(vessel, 'tmp', float(alpha))
+      txt_byte.set(__builtin__.byte_val)
       tkMessageBox.showinfo('Info ', 'Job done')
 
-  def on_btn_embed(self, event=None):
-    hide_frame()
-    btn_embed()
-    print('embed btn')
+  # def on_btn_embed(self, event=None):
+    # hide_frame()
+    # btn_embed()
+    # print('embed btn')
 
   def on_btn_decode(self, event=None):
     btn_decode()
@@ -166,6 +169,19 @@ class Decode:
       bpcs.decode(vessel, msgfile_decoded, float(alpha))
       tkMessageBox.showinfo('Info ', 'Job done')
 
+  def on_embed(self, event=None):
+    hide_frame()
+    btn_embed()
+    print('embed btn')
+
+  # def on_decode(self, event=None):
+  #   btn_decode()
+  #   print('embed decode')
+
+  def on_msepsnr(self, event=None):
+    btn_calculate()
+    print('embed mse psnr')
+
 class Calculate:
   def __init__(self, master):
     self.builder = builder = pygubu.Builder()
@@ -173,6 +189,7 @@ class Calculate:
     self.mainwindow = builder.get_object('scr_calculate', master)
     self.img_cover = builder.get_object('path_cover')
     self.img_stego = builder.get_object('path_stego')
+
 
     callbacks = {
       'btn_embed': btn_embed,
@@ -192,6 +209,8 @@ class Calculate:
   def btn_process(self, event=None):
     origin = self.img_cover.cget('path')
     encode = self.img_stego.cget('path')
+    txt_mse = self.builder.get_variable('val_mse')
+    txt_psnr = self.builder.get_variable('val_psnr')
     # im_origin = Image.open(origin, 'r')
     # im_encode = Image.open(encode, 'r')
     # raw_origin = list(im_origin.getdata())
@@ -202,10 +221,12 @@ class Calculate:
     # cnt_encode = get_rgbycbcr(im_encode)
     ref_img = cv2.imread(origin)
     noisy_img = cv2.imread(encode)
-    PSNR = compare_psnr(ref_img, noisy_img)
     MSE = compare_mse(ref_img, noisy_img)
-    print('PSNR : '+ repr(PSNR))
-    print('MSE : '+ repr(MSE))
+    PSNR = compare_psnr(ref_img, noisy_img)
+    txt_mse.set(round(MSE, 2))
+    txt_psnr.set(round(PSNR, 2))
+    # print('PSNR : '+ repr(PSNR))
+    # print('MSE : '+ repr(MSE))
     # print(cnt_encode)
 
   def path_cover(self, event=None):
@@ -223,6 +244,19 @@ class Calculate:
     img.thumbnail(size, Image.ANTIALIAS)
     self.img_label_2.new_image = ImageTk.PhotoImage(img)
     self.img_label_2.config(image=self.img_label_2.new_image)
+
+  def on_embed(self, event=None):
+    hide_frame()
+    btn_embed()
+    print('embed btn')
+
+  def on_decode(self, event=None):
+    btn_decode()
+    print('embed decode')
+
+  # def on_msepsnr(self, event=None):
+  #   btn_calculate()
+  #   print('embed mse psnr')
 
 ### custom build
 # def rgb_calc(ref_file):

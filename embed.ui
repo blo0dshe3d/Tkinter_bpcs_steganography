@@ -121,6 +121,7 @@
         <child>
           <object class="ttk.Entry" id="txt_byte">
             <property name="state">readonly</property>
+            <property name="textvariable">string:byte_val</property>
             <layout>
               <property name="column">12</property>
               <property name="propagate">True</property>
