@@ -1,13 +1,12 @@
 # TKinter & Bpcs steganography
 
-> python 2.7.15 / 14 < requirement
+python 2.7.15 / 14 < requirement<br/>
+pip requirement :exclamation:<br/>
 
-> :exclamation: pip requirement<br/>
-
-> pillow<br/>
-> bpcs<br/>
-> numpy<br/>
-> matplotlib<br/>
+pillow<br/>
+bpcs<br/>
+numpy<br/>
+matplotlib<br/>
 
 >act_on_image < replace import image > from PIL import image
 
@@ -21,7 +20,7 @@
      print('caught error : ' + repr(error))<br/>
 
 ### update 2020-20
->	use import __builtin__ at bpcs_steg_capacity to printout (nbytes) value
+use import __builtin__ at bpcs_steg_capacity to printout (nbytes) value <br/>
 
 > BPCS Explanation can be found over here
 > :link: https://github.com/mobeets/bpcs
