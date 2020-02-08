@@ -62,17 +62,31 @@ class Embed:
   def on_image(self, event=None):
     path = self.imgepath.cget('path')
     size = 300, 300
+    ext = os.path.splitext(path)
 
-    img = Image.open(path)
-    img.thumbnail(size, Image.ANTIALIAS)
+    if ext[1] == '.png':
+      img = Image.open(path)
+      img.thumbnail(size, Image.ANTIALIAS)
 
-    self.img_label.new_image = ImageTk.PhotoImage(img)
-    self.img_label.config(image=self.img_label.new_image)
-    tkMessageBox.showinfo('You choosed:', path)
+      self.img_label.new_image = ImageTk.PhotoImage(img)
+      self.img_label.config(image=self.img_label.new_image)
+      tkMessageBox.showinfo('You choosed:', path)
+    else:
+      tkMessageBox.showinfo('Warning','Please chose only *.png image!')
 
   def on_file(self, event=None):
     path = self.filepath.cget('path')
-    tkMessageBox.showinfo('You choosed:', path)
+    ext = os.path.splitext(path)
+    
+    if ext[1] == '.txt':
+      file = open(path, "r")
+      data = file.read()
+      number_of_characters = len(data)
+      print(number_of_characters)
+
+      tkMessageBox.showinfo('Info', 'Character length : ' + str(number_of_characters))
+    else:
+      tkMessageBox.showinfo('Warning', 'Please chose only *.txt File!')
 
   def btn_process(self, event=None):
     now = datetime.now()
@@ -91,6 +105,7 @@ class Embed:
       tkMessageBox.showinfo('Warn: ', 'Fill alpha input')
     else:
       bpcs.encode(vessel, file, encfile, float(alpha)) # embed msgfile in vslfile, write to encfile
+      tkMessageBox.showinfo('Info ', 'Job done')
   
   def btn_calculate(self, event=None):
     vessel = self.imgepath.cget('path')
@@ -146,12 +161,17 @@ class Decode:
   def path_image(self, event=None):
     path = self.imgepath.cget('path')
     size = 300, 300
-    img = Image.open(path)
-    img.thumbnail(size, Image.ANTIALIAS)
+    ext = os.path.splitext(path)
 
-    self.img_label.new_image = ImageTk.PhotoImage(img)
-    self.img_label.config(image=self.img_label.new_image)
-    tkMessageBox.showinfo('You choosed:', path)
+    if ext[1] == '.png':
+      img = Image.open(path)
+      img.thumbnail(size, Image.ANTIALIAS)
+
+      self.img_label.new_image = ImageTk.PhotoImage(img)
+      self.img_label.config(image=self.img_label.new_image)
+      tkMessageBox.showinfo('You choosed:', path)
+    else:
+      tkMessageBox.showinfo('Warning','Please chose only *.png image!')
 
   def btn_process(self, event=None):
     vessel = self.imgepath.cget('path')
@@ -232,18 +252,28 @@ class Calculate:
   def path_cover(self, event=None):
     size = 300, 300
     path = self.img_cover.cget('path')
-    img = Image.open(path)
-    img.thumbnail(size, Image.ANTIALIAS)
-    self.img_label_1.new_image = ImageTk.PhotoImage(img)
-    self.img_label_1.config(image=self.img_label_1.new_image)
+    ext = os.path.splitext(path)
+
+    if ext[1] == '.png':
+      img = Image.open(path)
+      img.thumbnail(size, Image.ANTIALIAS)
+      self.img_label_1.new_image = ImageTk.PhotoImage(img)
+      self.img_label_1.config(image=self.img_label_1.new_image)
+    else:
+      tkMessageBox.showinfo('Warning','Please chose only *.png image!')
 
   def path_stego(self, event=None):
     size = 300, 300
     path = self.img_stego.cget('path')
-    img = Image.open(path)
-    img.thumbnail(size, Image.ANTIALIAS)
-    self.img_label_2.new_image = ImageTk.PhotoImage(img)
-    self.img_label_2.config(image=self.img_label_2.new_image)
+    ext = os.path.splitext(path)
+
+    if ext[1] == '.png':
+      img = Image.open(path)
+      img.thumbnail(size, Image.ANTIALIAS)
+      self.img_label_2.new_image = ImageTk.PhotoImage(img)
+      self.img_label_2.config(image=self.img_label_2.new_image)
+    else:
+      tkMessageBox.showinfo('Warning','Please chose only *.png image!')
 
   def on_embed(self, event=None):
     hide_frame()
@@ -305,5 +335,6 @@ def hide_frame():
 
 if __name__ == '__main__':
   root = tk.Tk()
+  root.title("Home")
   app = Application(root)
   root.mainloop()

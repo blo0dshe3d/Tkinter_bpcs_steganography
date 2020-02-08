@@ -70,7 +70,7 @@
     <child>
       <object class="ttk.Labelframe" id="frm_action">
         <property name="height">400</property>
-        <property name="text" translatable="yes">Decoding</property>
+        <property name="text" translatable="yes">Extracting</property>
         <property name="width">500</property>
         <layout>
           <property name="column">0</property>
