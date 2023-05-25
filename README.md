@@ -1,3 +1,7 @@
+* This Repository only converting console to UI of the original code that can be found at https://github.com/mobeets/bpcs
+
+- Step
+
 # TKinter & Bpcs steganography
 
 python 2.7.15 / 14 < requirement<br/>
@@ -21,7 +25,3 @@ matplotlib<br/>
 
 ### update 2020-20
 use import __builtin__ at bpcs_steg_capacity to printout (nbytes) value <br/>
-
-> BPCS Explanation can be found over here
-> :link: https://github.com/mobeets/bpcs
-
